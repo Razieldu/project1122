@@ -32,7 +32,8 @@ export const countReducer = (state = initialState, action) => {
     case "VALiDATION_CHECK":
       ///確認該input輸入數字與驗證碼是否正確以及更新以點擊狀態為true
       let currentNum = { ...state.inputNum };
-      if ((state.validationNum[action.id]) === (state.inputNum[`num${action.id}`])) {
+      
+      if (Number(state.validationNum[action.id]) === Number(state.inputNum[`num${action.id}`])&&state.inputNum[`num${action.id}`]!=="") {
         let updatedState = {
           ...currentNum,
           [`numCheck${action.id}`]: true,
