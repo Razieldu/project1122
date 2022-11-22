@@ -1,6 +1,6 @@
 import { Component } from "react";
 import styled from "styled-components";
-import { numCheck, validationCheck } from "../store/reducers";
+import { numCheck, validationCheck } from "../actions/actions";
 import { connect } from "react-redux";
 const ValidationDiv = styled.div`
   text-align: center;
@@ -11,6 +11,7 @@ const InputStyled = styled.input`
   font-size: 20px;
   height: 50px;
   width: 50px;
+  border-radius:20%;
 `;
 
 class ValidationAreaPart extends Component {
@@ -28,7 +29,6 @@ class ValidationAreaPart extends Component {
   render() {
     return (
       <ValidationDiv>
-        <h1>{this.props.eachNum}</h1>
         <InputStyled
           ref={this.props.forwardRef}
           value={this.props.inputNum[`num${this.props.id}`]}

@@ -1,15 +1,28 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import ValidationAreaPart from "./component/ValidationAreaPart";
-import { set_validation_num, resetAllValue } from "./store/reducers";
+import InputIsNotValidArea from "./component/InputIsNotValidArea";
+import { numGenerator } from "./logic/logic";
+import { set_validation_num, resetAllValue } from "./actions/actions";
 import { connect } from "react-redux";
 
 const WrapperDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 20vh;
+  gap: 20px;
 `;
+
+const VlidationNumDiv = styled.div`
+display:flex;
+justify-content: center;
+align-items: center;
+gap:10px;
+height: 10vh;
+// color:yellow;
+font-style: italic;
+font-size: 20px;
+`
 
 const ButtonStyled = styled.button`
   border-radius: 50%;
@@ -32,41 +45,24 @@ const ButtonStyled = styled.button`
   }};
 `;
 
-const NumGenerator = () => {
-  let list = [];
-  for (let i = 1; i < 5; i++) {
-    let randomNum = Math.floor(Math.random() * 9);
-    list.push(randomNum);
-  }
-  return list;
-};
-
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      formIsValid:
-        this.props.inputNum.numCheck0 &&
-        this.props.inputNum.numCheck1 &&
-        this.props.inputNum.numCheck2 &&
-        this.props.inputNum.numCheck3,
+      formIsValid: this.props.inputNum.numCheck0 &&this.props.inputNum.numCheck1 &&this.props.inputNum.numCheck2 &&this.props.inputNum.numCheck3,
       buttonClicked: false,
     };
     this.refData = React.createRef(null);
   }
   componentDidMount() {
-    this.props.setnum(NumGenerator());
+    this.props.setnum(numGenerator());
   }
   componentDidUpdate(preProps, prevState) {
     if (preProps.inputNum !== this.props.inputNum) {
       this.setState((prev) => {
         return {
           ...prev,
-          formIsValid:
-            this.props.inputNum.numCheck0 &&
-            this.props.inputNum.numCheck1 &&
-            this.props.inputNum.numCheck2 &&
-            this.props.inputNum.numCheck3,
+          formIsValid: this.props.inputNum.numCheck0 &&this.props.inputNum.numCheck1 &&this.props.inputNum.numCheck2 &&this.props.inputNum.numCheck3,
         };
       });
     }
@@ -80,21 +76,9 @@ class App extends Component {
     if (!this.state.formIsValid) {
       return;
     }
-    if (
-      this.props.inputNum.numCheck0 &&
-      this.props.inputNum.numCheck1 &&
-      this.props.inputNum.numCheck2 &&
-      this.props.inputNum.numCheck3
-    ) {
+    if (this.props.inputNum.numCheck0 &&this.props.inputNum.numCheck1 &&this.props.inputNum.numCheck2 &&this.props.inputNum.numCheck3) {
       console.log(this.refData);
-      
     }
-    console.log(
-      this.props.inputNum.num0,
-      this.props.inputNum.num1,
-      this.props.inputNum.num2,
-      this.props.inputNum.num3
-    );
     this.setState((prev) => {
       return {
         ...prev,
@@ -104,53 +88,43 @@ class App extends Component {
     this.props.resetAll();
   };
   NumGenerateHandler = () => {
-    this.props.setnum(NumGenerator());
+    this.props.setnum(numGenerator());
   };
   render() {
     // console.log(this.refData);
-    let one = !this.props.inputNum.numCheck0 && this.props.inputNum.numClicked0;
-    let two = !this.props.inputNum.numCheck1 && this.props.inputNum.numClicked1;
-    let three = !this.props.inputNum.numCheck2 && this.props.inputNum.numClicked2;
-    let four =!this.props.inputNum.numCheck3 && this.props.inputNum.numClicked3;
-
-    const show = one ? (
-      <p style={{ color: "red" }}>驗證碼不正確</p>
-    ) : two ? (
-      <p style={{ color: "red" }}>驗證碼不正確</p>
-    ) : three ? (
-      <p style={{ color: "red" }}>驗證碼不正確</p>
-    ) : four ? (
-      <p style={{ color: "red" }}>驗證碼不正確</p>
-    ) : null;
-
     return (
       <div style={{ textAlign: "center" }}>
+        <h1>免費試玩</h1>
         <form onSubmit={this.formSubmitHandler}>
+          <VlidationNumDiv>
+            {this.props.validationNum.map((every,index) => (
+              <h1 key={index}>{every}</h1>
+            ))}
+          </VlidationNumDiv>
           <WrapperDiv>
             {this.props.validationNum.map((each, index) => (
               <ValidationAreaPart
                 forwardRef={this.refData}
                 key={index}
                 id={index}
-                eachNum={each}
               />
             ))}
           </WrapperDiv>
           <p>
-          如果驗證碼不清晰,請點擊
-          <span
-            onClick={this.NumGenerateHandler}
-            style={{
-              cursor: "pointer",
-              color: "blue",
-              fontSize:"20px",
-              textDecoration: "underline",
-            }}
-          >
-            這裡
-          </span>
-          更新
-        </p>
+            如果驗證碼不清晰,請點擊
+            <span
+              onClick={this.NumGenerateHandler}
+              style={{
+                cursor: "pointer",
+                color: "blue",
+                fontSize: "20px",
+              }}
+            >
+              這裡
+            </span>
+            更新
+          </p>
+         <InputIsNotValidArea/>
           <ButtonStyled
             notUse={!this.state.formIsValid}
             disabled={!this.state.formIsValid}
@@ -160,10 +134,7 @@ class App extends Component {
           </ButtonStyled>
           <p>商務聯繫:s123@ea.com</p>
         </form>
-        
-        {show}
-
-        <h1>{this.props.validationNum[0]}</h1>
+        {/* <h1>{this.props.validationNum[0]}</h1>
         <h1>{this.props.validationNum[1]}</h1>
         <h1>{this.props.validationNum[2]}</h1>
         <h1>{this.props.validationNum[3]}</h1>
@@ -191,7 +162,7 @@ class App extends Component {
         <br></br>
         {`輸入框3失去焦點${this.props.inputNum.numClicked2}`}
         <br></br>
-        {`輸入框4失去焦點${this.props.inputNum.numClicked3}`}
+        {`輸入框4失去焦點${this.props.inputNum.numClicked3}`} */}
       </div>
     );
   }
