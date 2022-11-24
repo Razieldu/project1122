@@ -96,8 +96,8 @@ class App extends Component {
         buttonClicked: true,
       };
     });
-    if (this.props.inputNum.numCheck0 &&this.props.inputNum.numCheck1 &&this.props.inputNum.numCheck2 &&this.props.inputNum.numCheck3) {
-      ////輸入的四個input符合驗證碼
+    if (this.props.inputNum.numCheck0 &&this.props.inputNum.numCheck1 &&this.props.inputNum.numCheck2 &&this.props.inputNum.numCheck3) {   
+      ////輸入的四個input符合驗證碼////
       console.log("success");
       setTimeout(()=>{
         this.setState((prev) => {
@@ -109,15 +109,18 @@ class App extends Component {
         });
         this.props.resetAll();
       },1000)
+ 
     } else {
-      //輸入的其中一個input不符合驗證碼
+       ////輸入的其中一個input不符合驗證碼////  
       this.setState((prev) => {
         return {
           ...prev,
           showInfo: true,
         };
       });
+
       setTimeout(() => {
+      ////更新state  
         this.setState((prev) => {
           return {
             ...prev,
@@ -125,7 +128,6 @@ class App extends Component {
             buttonClicked:false
           };
         });
-        ////更新state
         this.props.resetAll();
         ////重置redux state
         this.NumGenerateHandler()
